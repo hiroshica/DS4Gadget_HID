@@ -66,4 +66,4 @@ BOARDS=('adafruit:samd:adafruit_trinket_m0' 'adafruit:samd:adafruit_itsybitsy_m0
 build_all viddefault >error_viddefault 2>&1
 # Use Dual Shock 4 VID/PID
 build_all vidds4 "--build-properties build.vid=0x054c,build.pid=0x09cc"  >error_vidds4 2>&1
-rmdir -rf ${ACLI_TMP}
+rm -rf ${ACLI_TMP}
