@@ -48,6 +48,7 @@ export HID_PROJECT=$ARDUINO_DIRECTORIES_USER/libraries/HID-Project/src
 arduino-cli core update-index
 # The latest version does not work. Use this version
 arduino-cli core install adafruit:samd@1.5.14
+#arduino-cli core install arduino:mbed:pico
 arduino-cli core list
 arduino-cli lib install Bounce2
 arduino-cli lib install "Adafruit DotStar"
@@ -62,8 +63,9 @@ find ${ARDUINO_DIRECTORIES_DATA} -name USBDesc.h -print0 | xargs -0 sed -i 's/^#
 # Fix USB class/subclass/protocol
 find ${ARDUINO_DIRECTORIES_DATA} -name USBCore.cpp -print0 | xargs -0 sed -i -e 's/bool _cdcComposite.*;/bool _cdcComposite = false;/;/if (setup.wLength == 8)/i #ifdef CDC_ENABLED' -e '/_cdcComposite = 1/a #endif'
 # Compile all examples for all boards
-BOARDS=('adafruit:samd:adafruit_trinket_m0' 'adafruit:samd:adafruit_itsybitsy_m0' 'adafruit:samd:adafruit_itsybitsy_m4')
+BOARDS=('adafruit:samd:adafruit_trinket_m0' 'adafruit:samd:adafruit_itsybitsy_m0' 'adafruit:samd:adafruit_itsybitsy_m4' 'arduino:mbed:pico' 'arduino:mbed_rp2040:pico')
 build_all viddefault >error_viddefault 2>&1
 # Use Dual Shock 4 VID/PID
 build_all vidds4 "--build-properties build.vid=0x054c,build.pid=0x09cc"  >error_vidds4 2>&1
+
 rm -rf ${ACLI_TMP}
