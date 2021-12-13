@@ -5,8 +5,8 @@ build_all() {
         export ARDUINO_BOARD_FQBN=${board}
         ARDUINO_BOARD_FQBN2=${ARDUINO_BOARD_FQBN//:/.}
         arduino-cli cache clean
-        rm -rf /tmp/arduino-core-cache
-        find /tmp -type d -name 'arduino-sketch-*' -print0 |xargs -0 rm -rf
+        rm -rf ${ACLI_TMP}/arduino-core-cache
+        find ${ACLI_TMP} -type d -name 'arduino-sketch-*' -print0 |xargs -0 rm -rf
         find ${MYPROJECT_EXAMPLES} -type d -name build -print0 |xargs -0 rm -rf
         find ${MYPROJECT_EXAMPLES} -name '*.ino' -print0 | xargs -0 -n 1 arduino-cli compile --verbose --fqbn ${board} ${2}
         # Convert all BIN to UF2 for drag-and-drop burning on boards with UF2 boot loader
@@ -31,7 +31,12 @@ build_all() {
     done
 }
 
-ARDDIR=/tmp/acli_ds4gadget_hid_$$
+ACLI_TMP="${PWD}/tmp"
+export TMP=${ACLI_TMP}
+#echo ${ACLI_TMP}
+mkdir ${ACLI_TMP}
+
+ARDDIR=${ACLI_TMP}/acli_ds4gadget_hid_$$
 export ARDUINO_BOARD_MANAGER_ADDITIONAL_URLS="https://adafruit.github.io/arduino-board-index/package_adafruit_index.json"
 export ARDUINO_DIRECTORIES_DATA="${ARDDIR}/data"
 export ARDUINO_DIRECTORIES_DOWNLOADS="${ARDDIR}/downloads"
@@ -61,3 +66,4 @@ BOARDS=('adafruit:samd:adafruit_trinket_m0' 'adafruit:samd:adafruit_itsybitsy_m0
 build_all viddefault >error_viddefault 2>&1
 # Use Dual Shock 4 VID/PID
 build_all vidds4 "--build-properties build.vid=0x054c,build.pid=0x09cc"  >error_vidds4 2>&1
+rmdir -rf ${ACLI_TMP}
