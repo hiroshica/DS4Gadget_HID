@@ -31,7 +31,7 @@ build_all() {
     done
 }
 
-ACLI_TMP="${PWD}/tmp"
+ACLI_TMP="$HOME/tmp"
 export TMP=${ACLI_TMP}
 #echo ${ACLI_TMP}
 mkdir ${ACLI_TMP}
